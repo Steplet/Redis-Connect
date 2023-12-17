@@ -2,11 +2,9 @@ package com.example.RedisConnect.controller
 
 import com.example.RedisConnect.servises.DefServise
 import com.example.RedisConnect.servises.JsonServices
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import netscape.javascript.JSObject
+import org.json.JSONObject
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/v1")
@@ -25,6 +23,12 @@ class Controller(val serv:DefServise,
     @PostMapping("/toApp")
     fun sendToApp(){
         TODO("Send data to app")
+    }
+    @GetMapping("/toApp")
+    fun sendToAppStock(data: JSONObject): JSONObject {
+
+        return data
+
     }
 
     @PostMapping("/getStock/{symbol}")
