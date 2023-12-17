@@ -26,7 +26,7 @@ class Controller(val serv:DefServise,
     }
     @GetMapping("/toApp")
     fun sendToAppStock(data: JSONObject): JSONObject {
-
+        println("test")
         return data
 
     }
