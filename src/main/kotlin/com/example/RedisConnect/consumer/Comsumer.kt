@@ -32,6 +32,11 @@ class Comsumer(@Lazy val controller:Controller): MessageListener {
                 controller.sendToAppStock(json)
                 println("stock got")
             }
+            "gotAllStocks" -> {
+                json.remove("Command")
+                println(json)
+                controller.showAllStocks(json)
+            }
             else -> {
                 println("Wrong: bad cmd")
             }

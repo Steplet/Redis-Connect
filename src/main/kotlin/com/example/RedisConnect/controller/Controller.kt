@@ -24,16 +24,31 @@ class Controller(val serv:DefServise,
     fun sendToApp(){
         TODO("Send data to app")
     }
-    @GetMapping("/toApp")
+    @PostMapping("/toAppStock")
     fun sendToAppStock(data: JSONObject): JSONObject {
-        println("test")
         return data
 
     }
+    @PostMapping("toApp/showAllStocks")
+    fun showAllStocks(data: JSONObject): JSONObject{
+        return data
+    }
 
-    @PostMapping("/getStock/{symbol}")
-    fun getStock(@PathVariable symbol:String){
-        val mess = jsonServ.createJsonSymbol(symbol, "getStock")
+
+    @PostMapping("delStock/{id}")
+    fun delStockById(@PathVariable id:Int){
+        val mess = jsonServ.createJsonID(id, "delById")
+        serv.noti(mess.toString(), channelMicroOne)
+    }
+
+    @PostMapping("/getAllStocks")
+    fun getAllStocks(){
+        val mess = JSONObject().put("Command", "getAllStocks")
+        serv.noti(mess.toString(), channelMicroOne)
+    }
+    @PostMapping("/getStock/{symbol}/{number}")
+    fun getStock(@PathVariable symbol:String, @PathVariable number:Int){
+        val mess = jsonServ.createJsonSymbol(symbol, number,  "getStock")
         serv.noti(mess.toString(), channelMicroOne)
     }
 
