@@ -19,7 +19,11 @@ class Controller(val serv:DefService,
 
     val channelMicroOne: String = "postMicroServicesOne"
 
+    val channelMicroLogin: String = "postMicroServicesLogin"
+
     var jsonToApp:JSONObject = JSONObject()
+
+    var userId:Int = -1
 
     /**
      * Part of app's mapping
@@ -28,17 +32,16 @@ class Controller(val serv:DefService,
     fun sendToApp(){
         TODO("Send data to app")
     }
-    @PostMapping("/toAppStock")
+    @GetMapping("/toAppStock")
     fun sendToAppStock(): String {
         return jsonToApp.toString()
 
     }
     @GetMapping("toApp/showAllStocks")
     fun showAllStocks(): String {
-//        println(jsonToApp)
         return jsonToApp.toString()
     }
-    @PostMapping("toApp/showPriceStock")
+    @GetMapping("toApp/showPriceStock")
     fun showPriceStock(): String {
         return jsonToApp.toString()
     }
@@ -47,20 +50,27 @@ class Controller(val serv:DefService,
      * Part of microservices mapping
      */
 
+    @PostMapping("login/{login}/{password}")
+    fun setLogin(@PathVariable login: String, @PathVariable password: String){
+        val mess = jsonServ.createJsonFroPass(login, password, "getIdFromLogin")
+        serv.noti(mess.toString(), "channelMicroLogin" )
+
+    }
     @PostMapping("delStock/{id}")
     fun delStockById(@PathVariable id:Int){
-        val mess = jsonServ.createJsonID(id, "delById")
+        val mess = jsonServ.createJsonID(id, userId ,"delById")
         serv.noti(mess.toString(), channelMicroOne)
     }
 
     @PostMapping("/getAllStocks")
     fun getAllStocks(){
-        val mess = JSONObject().put("Command", "getAllStocks")
+        var mess = JSONObject().put("Command", "getAllStocks")
+        mess.put("userId", userId)
         serv.noti(mess.toString(), channelMicroOne)
     }
     @PostMapping("/addStock/{symbol}/{number}")
     fun addStock(@PathVariable symbol:String, @PathVariable number:Int){
-        val mess = jsonServ.createJsonSymbol(symbol, number,  "addStock")
+        val mess = jsonServ.createJsonSymbol(symbol, userId, number,  "addStock")
         serv.noti(mess.toString(), channelMicroOne)
     }
 
