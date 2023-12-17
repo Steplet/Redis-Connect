@@ -1,39 +1,51 @@
 package com.example.RedisConnect.controller
 
-import com.example.RedisConnect.servises.DefServise
+import com.example.RedisConnect.servises.DefService
+
 import com.example.RedisConnect.servises.JsonServices
 import netscape.javascript.JSObject
 import org.json.JSONObject
 import org.springframework.web.bind.annotation.*
 
+/**
+ * Api controller
+ */
 @RestController
 @RequestMapping("/api/v1")
-class Controller(val serv:DefServise,
+class Controller(val serv:DefService,
                  val jsonServ:JsonServices,
                 )
 {
 
     val channelMicroOne: String = "postMicroServicesOne"
 
-    @PostMapping("/redis")
-    private fun sendIt(){
-        serv.noti("Hello", channelMicroOne)
-    }
+    var jsonToApp:JSONObject = JSONObject()
 
+    /**
+     * Part of app's mapping
+     */
     @PostMapping("/toApp")
     fun sendToApp(){
         TODO("Send data to app")
     }
     @PostMapping("/toAppStock")
-    fun sendToAppStock(data: JSONObject): JSONObject {
-        return data
+    fun sendToAppStock(): String {
+        return jsonToApp.toString()
 
     }
-    @PostMapping("toApp/showAllStocks")
-    fun showAllStocks(data: JSONObject): JSONObject{
-        return data
+    @GetMapping("toApp/showAllStocks")
+    fun showAllStocks(): String {
+//        println(jsonToApp)
+        return jsonToApp.toString()
+    }
+    @PostMapping("toApp/showPriceStock")
+    fun showPriceStock(): String {
+        return jsonToApp.toString()
     }
 
+    /**
+     * Part of microservices mapping
+     */
 
     @PostMapping("delStock/{id}")
     fun delStockById(@PathVariable id:Int){
@@ -46,9 +58,16 @@ class Controller(val serv:DefServise,
         val mess = JSONObject().put("Command", "getAllStocks")
         serv.noti(mess.toString(), channelMicroOne)
     }
-    @PostMapping("/getStock/{symbol}/{number}")
-    fun getStock(@PathVariable symbol:String, @PathVariable number:Int){
-        val mess = jsonServ.createJsonSymbol(symbol, number,  "getStock")
+    @PostMapping("/addStock/{symbol}/{number}")
+    fun addStock(@PathVariable symbol:String, @PathVariable number:Int){
+        val mess = jsonServ.createJsonSymbol(symbol, number,  "addStock")
+        serv.noti(mess.toString(), channelMicroOne)
+    }
+
+    @PostMapping("showPriceStock/{symbol}")
+    fun showPriceStock(@PathVariable symbol: String){
+        val mess = JSONObject().put("Command", "showPriceStock")
+        mess.put("symbol", symbol)
         serv.noti(mess.toString(), channelMicroOne)
     }
 

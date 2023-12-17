@@ -9,9 +9,15 @@ import org.springframework.context.annotation.Lazy
 import org.springframework.data.redis.connection.Message
 import org.springframework.data.redis.connection.MessageListener
 import org.springframework.stereotype.Component
-
+/**
+ * Simple Redis Consumer for Pub/Sub Broker
+ *
+ */
 @Component
 class Comsumer(@Lazy val controller:Controller): MessageListener {
+    /**
+     * Listener of messages
+     */
     override fun onMessage(message: Message, pattern: ByteArray?) {
 
         var mes = message.toString().replace("\\", "")
@@ -21,21 +27,20 @@ class Comsumer(@Lazy val controller:Controller): MessageListener {
         val cmd = json.get("Command")
 
         when( cmd) {
-            "test" -> {
 
-                println("test accepted")
-                println(json)
-//                println(json.get("dataPrice"))
-            }
             "gotStock" -> {
                 json.remove("Command")
-                controller.sendToAppStock(json)
-                println("stock got")
+                controller.jsonToApp = json
             }
             "gotAllStocks" -> {
                 json.remove("Command")
                 println(json)
-                controller.showAllStocks(json)
+                controller.jsonToApp = json
+            }
+            "gotPriceStock" -> {
+                json.remove("Command")
+                println(json)
+                controller.jsonToApp = json
             }
             else -> {
                 println("Wrong: bad cmd")

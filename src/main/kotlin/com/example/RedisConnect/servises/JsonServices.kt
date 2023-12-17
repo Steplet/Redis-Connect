@@ -3,6 +3,9 @@ package com.example.RedisConnect.servises
 import org.json.JSONObject
 import org.springframework.stereotype.Service
 
+/**
+ * Useful services for json manipulations
+ */
 @Service
 class JsonServices {
 

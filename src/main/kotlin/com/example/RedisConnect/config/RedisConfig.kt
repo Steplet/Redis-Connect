@@ -14,13 +14,19 @@ import org.springframework.data.redis.listener.adapter.MessageListenerAdapter
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer
 import org.springframework.data.redis.serializer.RedisSerializer
 import org.yaml.snakeyaml.serializer.Serializer
-
+/**
+ * Redis Configuration
+ */
 @Configuration
 class RedisConfig(val msgListener: MessageListener) {
-
+    /**
+     * Redis Host from application.properties
+     */
     @Value("\${spring.data.redis.host}")
     lateinit var redisHost: String
-
+    /**
+     * Redis Port from application.properties
+     */
     @Value("\${spring.data.redis.port}")
     lateinit var redisPort: String
 
@@ -43,17 +49,7 @@ class RedisConfig(val msgListener: MessageListener) {
         return template
     }
 
-//    @Bean
-//    fun redisDeTemp(): RedisTemplate<String, Any> {
-//        val template: RedisTemplate<String, Any> = RedisTemplate()
-//        template.connectionFactory = jedisConnectionFactory()
-//        return template
-//    }
 
-//    @Bean
-//    fun topic(): ChannelTopic{
-//        return ChannelTopic(redisTopic)
-//    }
 
 
     @Bean
